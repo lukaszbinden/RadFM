@@ -14,7 +14,7 @@ class MultiLLaMAForCausalLM(nn.Module):
         super(MultiLLaMAForCausalLM, self).__init__()  
         try:
             self.lang_model = LlamaForCausalLM.from_pretrained(
-                lang_model_path,
+                lang_model_path, device_map="auto"
             )
         except:
             config = AutoConfig.from_pretrained(lang_model_path)
