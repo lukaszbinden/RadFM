@@ -16,7 +16,9 @@ class MultiLLaMAForCausalLM(nn.Module):
             self.lang_model = LlamaForCausalLM.from_pretrained(
                 lang_model_path, device_map="auto"
             )
-        except:
+        except Exception as ex:
+            print("couldn't load pretrained model: ", ex)
+            print(ex)
             config = AutoConfig.from_pretrained(lang_model_path)
             self.lang_model = LlamaForCausalLM(config)
         self.lang_model.gradient_checkpointing_enable()
