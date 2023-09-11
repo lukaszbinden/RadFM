@@ -96,14 +96,19 @@ def main():
     
     print("Setup Model")
     model = MultiLLaMAForCausalLM(
-        lang_model_path='./Language_files', ### Build up model based on LLaMa-13B config
+        lang_model_path='./Language_files',  ### Build up model based on LLaMa-13B config
     )
+
+    use_parallelformers = True
+    if use_parallelformers:
+        from parallelformers import parallelize
+        parallelize(model, num_gpus=3, fp16=True, verbose='detail')
+
     ckpt = torch.load('./pytorch_model.bin',map_location ='cpu') # Please dowloud our checkpoint from huggingface and Decompress the original zip file first
     model.load_state_dict(ckpt)
     print("Finish loading model")
-    
     model = model.to('cuda')
-    model.eval() 
+    model.eval()
     with torch.no_grad():
         lang_x = text_tokenizer(
                 question, max_length=2048, truncation=True, return_tensors="pt"
