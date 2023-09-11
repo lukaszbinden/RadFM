@@ -14,12 +14,14 @@ class MultiLLaMAForCausalLM(nn.Module):
         super(MultiLLaMAForCausalLM, self).__init__()  
         try:
             self.lang_model = LlamaForCausalLM.from_pretrained(
-                lang_model_path, device_map="auto"
+                lang_model_path,
+                load_in_4bit=True,
+                device_map="auto"
             )
         except Exception as ex:
             print("couldn't load pretrained model: ", ex)
             print(ex)
-            config = AutoConfig.from_pretrained(lang_model_path)
+            config = AutoConfig.from_pretrained(lang_model_path, load_in_4bit=True, device_map="auto")
             self.lang_model = LlamaForCausalLM(config)
         self.lang_model.gradient_checkpointing_enable()
         self.lang_model.enable_input_require_grads()

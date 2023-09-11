@@ -99,7 +99,7 @@ def main():
         lang_model_path='./Language_files',  ### Build up model based on LLaMa-13B config
     )
 
-    use_parallelformers = True
+    use_parallelformers = False
     if use_parallelformers:
         from parallelformers import parallelize
         parallelize(model, num_gpus=3, fp16=True, verbose='detail')
